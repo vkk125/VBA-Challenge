@@ -1,0 +1,62 @@
+Sub stock():
+    ' variable to hold ticker
+    ticker = ""
+    ' variable to hold the volume
+    volume = 0
+    ' variable to hold the summary table
+    summaryTableRow = 2
+    'opening'
+    opening = " "
+    closing = " "
+    ' use function to find the last row in the sheet
+    lastRow = Cells(Rows.Count, 1).End(xlUp).Row
+   'start looping'
+    For Row = 2 To lastRow
+        ' check to see if the ticker
+            If Cells(Row + 1, 1).Value <> Cells(Row, 1).Value Then
+
+                ' if the brand changes,
+                ticker = Cells(Row, 1).Value
+                
+                opening = Cells(Row, 3).Value
+                
+                closing = Cells(Row - 250, 6).Value
+                
+                yearChange = opening - closing
+                
+                Cells(summaryTableRow, 10).Value = yearChange
+                
+                percentChange = yearChange / opening
+                
+                Cells(summaryTableRow, 11).Value = percentChange
+                
+                Cells(summaryTableRow, 11).Style = "Percent"
+                
+                volume = volume + Cells(Row, 7).Value
+                
+                Cells(summaryTableRow, 9).Value = ticker
+               
+                Cells(summaryTableRow, 12).Value = volume
+               
+               'reset and repeat'
+                summaryTableRow = summaryTableRow + 1
+               
+                volume = 0
+            Else
+                ' if the ticker stays the same,
+                volume = volume + Cells(Row, 7).Value
+                
+                
+            End If
+            If Cells(summaryTableRow, 10).Value >= 0 Then
+            
+            Cells(summaryTableRow, 10).Interior.ColorIndex = 4
+            
+            Else
+            
+            Cells(summaryTableRow, 10).Interior.ColorIndex = 3
+            
+            End If
+            
+    Next Row
+End Sub
